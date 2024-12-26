@@ -1,15 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // 确保静态资源可以被正确访问
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/your-repo-name' : '',
-  // 配置图片域名
-  images: {
-    domains: ['localhost'],
-    // 允许本地图片优化
-    dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  // 允许在服务器端导入 Phaser
+  webpack: (config) => {
+    config.externals = [...config.externals, { canvas: 'canvas' }]
+    return config
   },
+  // 如果需要导出静态网站
+  output: 'export',
+  // 禁用图片优化（如果使用自定义图片加载）
+  images: {
+    unoptimized: true
+  }
 }
 
 module.exports = nextConfig 
