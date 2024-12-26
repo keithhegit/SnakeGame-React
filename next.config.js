@@ -1,14 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // 允许在服务器端导入 Phaser
   webpack: (config) => {
-    config.externals = [...config.externals, { canvas: 'canvas' }]
+    // 添加 Phaser 支持
+    config.module.rules.push({
+      test: /\.js$/,
+      include: /node_modules/,
+      exclude: /node_modules\/(?!phaser)/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['next/babel'],
+        },
+      },
+    })
     return config
   },
   // 如果需要导出静态网站
   output: 'export',
-  // 禁用图片优化（如果使用自定义图片加载）
   images: {
     unoptimized: true
   }
