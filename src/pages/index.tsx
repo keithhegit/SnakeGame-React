@@ -1,17 +1,28 @@
-import * as React from 'react'
-import type { Game } from 'phaser'
-import dynamic from 'next/dynamic'
+import React, { useEffect, useRef } from 'react'
+import { Game } from 'phaser'
+import { GameConfig } from '@/game/config'
 
-// 动态导入 Phaser，避免 SSR 问题
-const PhaserGame = dynamic(
-  () => import('@/game/PhaserGame').then(mod => mod.PhaserGame),
-  { ssr: false }
-)
+export default function Home() {
+  const gameRef = useRef<Game | null>(null)
 
-export default function GamePage() {
+  useEffect(() => {
+    // 防止在服务器端运行
+    if (typeof window !== 'undefined' && !gameRef.current) {
+      gameRef.current = new Game(GameConfig)
+    }
+
+    // 清理函数
+    return () => {
+      if (gameRef.current) {
+        gameRef.current.destroy(true)
+        gameRef.current = null
+      }
+    }
+  }, [])
+
   return (
-    <div className="w-screen h-screen flex items-center justify-center bg-gray-900 touch-none">
-      <PhaserGame />
-    </div>
+    <main className="flex min-h-screen flex-col items-center justify-center">
+      <div id="game-container" className="w-full h-full" />
+    </main>
   )
 } 
