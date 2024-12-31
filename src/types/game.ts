@@ -1,46 +1,28 @@
-export enum GameState {
-  DIFFICULTY_SELECT = 'DIFFICULTY_SELECT',
-  READY = 'READY',
-  COUNTDOWN = 'COUNTDOWN',
-  PLAYING = 'PLAYING',
-  PAUSED = 'PAUSED',
-  GAME_OVER = 'GAME_OVER',
-  NAME_INPUT = 'NAME_INPUT',
-  LEADERBOARD = 'LEADERBOARD'
+export enum Direction {
+  Up = 'UP',
+  Down = 'DOWN',
+  Left = 'LEFT',
+  Right = 'RIGHT'
 }
 
 export enum Difficulty {
-  EASY = 'EASY',
-  MEDIUM = 'MEDIUM',
-  HARD = 'HARD'
+  Casual = 'CASUAL',
+  Hard = 'HARD',
+  Hell = 'HELL',
+  Og = 'OG'
 }
 
-export interface GameSettings {
-  speed: number;
-  timeLimit: number;
-  lives: number;
-  wallCollision: boolean;
-  foodTimeout?: number;
+export interface Position {
+  x: number;
+  y: number;
 }
 
-export const DIFFICULTY_SETTINGS: Record<Difficulty, GameSettings> = {
-  [Difficulty.EASY]: {
-    speed: 4,
-    timeLimit: 35,
-    lives: 3,
-    wallCollision: true
-  },
-  [Difficulty.MEDIUM]: {
-    speed: 6,
-    timeLimit: 60,
-    lives: 1,
-    wallCollision: true
-  },
-  [Difficulty.HARD]: {
-    speed: 8,
-    timeLimit: 90,
-    lives: 1,
-    wallCollision: true,
-    foodTimeout: 5000
-  }
-} 
+export interface GameState {
+  snake: Position[];
+  direction: Direction;
+  food: Position;
+  score: number;
+  isGameOver: boolean;
+  isPaused: boolean;
+  obstacles: Position[];
+}
